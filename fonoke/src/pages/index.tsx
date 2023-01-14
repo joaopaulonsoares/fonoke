@@ -5,20 +5,26 @@ import styles from '@/styles/Home.module.css'
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-
+import Tooltip from '@mui/material/Tooltip';
 import { KaraokeText } from '../components/KaraokeText'
-import { useState } from 'react';
-
-const inter = Inter({ subsets: ['latin'] })
+import { useRef, useState } from 'react';
+import TextField from '@mui/material/TextField';
+import { IconButton } from '@mui/material';
+import ReplayIcon from '@mui/icons-material/Replay';
 
 export default function Home() {
-  const listaTeste = ["porta", "porteira", "portão"]
-  const [wordsList, setWordsList] = useState(listaTeste)
+  //const listaTeste = ["porta", "porteira", "portão"]
+  const [inputValue, setInputValue] = useState('')
+  const [wordsList, setWordsList] = useState<Array<string>>([])
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
+  const wordsListEqualsZero = wordsList.length === 0;
  
-  console.log(wordsList)
+  async function handleWordsInserted(){
+    const value = inputValue;
+    const generatedArray = await value.split('/')
+    setWordsList(generatedArray)
+  }
 
- 
   return (
     <>
       <Head>
@@ -28,39 +34,60 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Palavra Número {currentWordIndex+1}/{wordsList.length}
-          </p>
-          <div>
-            <a
-            >
-              By João Soares
-            </a>
-          </div>
-        </div>
-        <div className={styles.center}>
-       
-        { wordsList.length === 0 ? <div>teste</div> : <KaraokeText text={wordsList[currentWordIndex]} />
-          }
-        </div>
 
-        <div  className={styles.center}>
-          <Grid container>
-            <Grid item xs={12}>
-                Palavra atual: {wordsList[currentWordIndex]}
-            </Grid>
-            <Grid item xs={4}>
+        <Box width="100%" display="flex" justifyContent="space-between" maxWidth="700px">
+          <p>
+            {wordsListEqualsZero ? ( "Insira as palavras para continuar") : (`Palavra  ${currentWordIndex+1}/${wordsList.length}`)}
+          </p>
+          { !wordsListEqualsZero && <p><b>Palavra atual:</b>{wordsList[currentWordIndex]}</p>}
+          { !wordsListEqualsZero && (
+            <Tooltip title="Limpar palavras">
+              <IconButton aria-label="reiniciar" onClick={() => setWordsList([])}>
+                <ReplayIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Box>
+        <div className={styles.center}>
+        { wordsList.length === 0 ? 
+          <Box display="flex" flexDirection='column'   sx={{
+            width: 500,
+            maxWidth: '100%',
+          }}> 
+            <TextField
+              id="filled-multiline-static"
+              label="Insira as palavras"
+              multiline
+              rows={5}
+              fullWidth
+              helperText="Por favor separe as palavras ou frases com /. Exemplo: João / Paulo / Nunes / é sensacional"
+              onChange={(event) => setInputValue(event.target.value)}
+            />
+            <Button onClick={() =>handleWordsInserted()}>Continuar com essas palavras</Button>
+          </Box>
+        : <KaraokeText text={wordsList[currentWordIndex]} />
+        }
+        </div>
+        
+        <Box width="100%" display="flex" justifyContent="center">
+          <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
+            <Grid item >
                 <Button size="large" variant='outlined'  disabled={currentWordIndex === 0} onClick={() => {setCurrentWordIndex(currentWordIndex - 1)}}>{'<'}</Button>
             </Grid>
-            <Grid item xs={4}>
-                <Button size="large" onClick={() => {setCurrentWordIndex(currentWordIndex)}}>Repetir</Button>
+            <Grid item>
+                <Button size="large" onClick={() => {setCurrentWordIndex(currentWordIndex)}}>Repetir palavra</Button>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item>
                 <Button size="large" disabled={wordsList.length === currentWordIndex+1} variant='outlined' onClick={() => {setCurrentWordIndex(currentWordIndex + 1)}}>{'>'}</Button>
             </Grid>
           </Grid>
-        </div>
+        </Box>
+        <Box width="100%" display="flex" justifyContent="center">
+          Feito por João Paulo Nunes Soares
+        </Box>
+
+
+     
       </main>
     </>
   )

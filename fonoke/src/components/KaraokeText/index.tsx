@@ -35,8 +35,8 @@ export function KaraokeText({text}:KaraokeInterface){
     <AnimatedText
     type="chars" // animate words or chars
     animationType="wave"
-    interval={0.3}
-    duration={4}
+    interval={0.2}
+    duration={3}
     tag="p"
     className={styles.karaokeFont}
     includeWhiteSpaces
