@@ -1,11 +1,8 @@
 import styles from '@/styles/Home.module.css'
-
 import AnimatedText from "react-animated-text-content";
-
 
 interface KaraokeInterface{
   text:string
-
 }
 
 const vogais = ["a", "e", "i", "o", "u"]
@@ -23,7 +20,7 @@ function removeAccentofVogal(text:string){
 
 export function KaraokeText({text}:KaraokeInterface){
 
-  const triplicado = text.split('').map(function(char) {
+  const worldWithVogalsMultiplied = text.split('').map(function(char) {
     if (vogais.indexOf(removeAccentofVogal(char).toLowerCase()) !== -1) {
       return char.repeat(4)
     } else {
@@ -33,17 +30,16 @@ export function KaraokeText({text}:KaraokeInterface){
 
   return (
     <AnimatedText
-    type="chars" // animate words or chars
-    animationType="wave"
-    interval={0.2}
-    duration={3}
-    tag="p"
-    className={styles.karaokeFont}
-    includeWhiteSpaces
-    threshold={0.3}
-
+      type="chars" // animate words or chars
+      animationType="wave"
+      interval={0.2}
+      duration={3}
+      tag="p"
+      className={styles.karaokeFont}
+      includeWhiteSpaces
+      threshold={0.3}
   >
-    {triplicado}
+    {worldWithVogalsMultiplied}
   </AnimatedText>
   )
 }

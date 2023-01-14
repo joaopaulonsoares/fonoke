@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { KaraokeText } from '../components/KaraokeText'
 import { useRef, useState } from 'react';
 import TextField from '@mui/material/TextField';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 
 export default function Home() {
@@ -35,53 +35,66 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
 
-        <Box width="100%" display="flex" justifyContent="space-between" maxWidth="700px">
-          <p>
-            {wordsListEqualsZero ? ( "Insira as palavras para continuar") : (`Palavra  ${currentWordIndex+1}/${wordsList.length}`)}
-          </p>
-          { !wordsListEqualsZero && <p><b>Palavra atual:</b>{wordsList[currentWordIndex]}</p>}
-          { !wordsListEqualsZero && (
-            <Tooltip title="Limpar palavras">
-              <IconButton aria-label="reiniciar" onClick={() => setWordsList([])}>
-                <ReplayIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
+        < >
+          { wordsListEqualsZero ? (
+            <Typography variant="h1" gutterBottom>Fonokê</Typography>
+          ) : (    
+            <Box width="100%" display="flex" justifyContent="space-between" maxWidth="700px">
+              <p>
+                {wordsListEqualsZero ? ( "Insira as palavras para continuar") : (`Item número  ${currentWordIndex+1}/${wordsList.length}`)}
+              </p>
+                <p><b>Palavra/Frase atual:</b>{wordsList[currentWordIndex]}</p>   
+              <Tooltip title="Limpar palavras">
+                <IconButton aria-label="reiniciar" onClick={() => setWordsList([])}>
+                  <ReplayIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+           )
+          }
+        </>
         <div className={styles.center}>
         { wordsList.length === 0 ? 
-          <Box display="flex" flexDirection='column'   sx={{
+          <Box display="flex" flexDirection='column' sx={{
             width: 500,
             maxWidth: '100%',
           }}> 
             <TextField
               id="filled-multiline-static"
-              label="Insira as palavras"
+              label="Insira as palavras ou frases"
               multiline
               rows={5}
               fullWidth
               helperText="Por favor separe as palavras ou frases com /. Exemplo: João / Paulo / Nunes / é sensacional"
               onChange={(event) => setInputValue(event.target.value)}
             />
-            <Button onClick={() =>handleWordsInserted()}>Continuar com essas palavras</Button>
+            <Button disabled={inputValue.length === 0} onClick={() =>handleWordsInserted()}>Continuar com essas palavras</Button>
           </Box>
-        : <KaraokeText text={wordsList[currentWordIndex]} />
+        : <Box sx={{
+          width: 700,
+          maxWidth: '100%',
+        }}>
+          <KaraokeText text={wordsList[currentWordIndex]} />
+          </Box>
         }
         </div>
-        
-        <Box width="100%" display="flex" justifyContent="center">
-          <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
-            <Grid item >
-                <Button size="large" variant='outlined'  disabled={currentWordIndex === 0} onClick={() => {setCurrentWordIndex(currentWordIndex - 1)}}>{'<'}</Button>
-            </Grid>
-            <Grid item>
-                <Button size="large" onClick={() => {setCurrentWordIndex(currentWordIndex)}}>Repetir palavra</Button>
-            </Grid>
-            <Grid item>
-                <Button size="large" disabled={wordsList.length === currentWordIndex+1} variant='outlined' onClick={() => {setCurrentWordIndex(currentWordIndex + 1)}}>{'>'}</Button>
-            </Grid>
-          </Grid>
-        </Box>
+        { !wordsListEqualsZero && (
+            <Box width="100%" display="flex" justifyContent="center">
+              <Grid container direction="row" justifyContent="center" alignItems="center" spacing={3}>
+                <Grid item >
+                    <Button size="large" variant='outlined'  disabled={currentWordIndex === 0} onClick={() => {setCurrentWordIndex(currentWordIndex - 1)}}>{'<'}</Button>
+                </Grid>
+                <Grid item>
+                    <Button size="large" onClick={() => {setCurrentWordIndex(currentWordIndex)}}>Repetir palavra</Button>
+                </Grid>
+                <Grid item>
+                    <Button size="large" disabled={wordsList.length === currentWordIndex+1} variant='outlined' onClick={() => {setCurrentWordIndex(currentWordIndex + 1)}}>{'>'}</Button>
+                </Grid>
+              </Grid>
+            </Box>
+          )
+        }
+
         <Box width="100%" display="flex" justifyContent="center">
           Feito por João Paulo Nunes Soares
         </Box>

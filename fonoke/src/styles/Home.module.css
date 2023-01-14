@@ -78,6 +78,7 @@
   align-items: center;
   position: relative;
   padding: 4rem 0;
+  text-align: center;
 }
 
 .karaokeFont {
@@ -293,4 +294,8 @@
   height: 100px;
   gap:15px;
   margin-right: 100px;
+}
+
+.centerText {
+  text-align: center;
 }
